@@ -1,0 +1,12 @@
+<div id="audioLoadingIndicator" style="display: none; margin-top: 40px; margin-left: 2px;">
+                            <img src="/dccl--frontend-translate-app/logo.png" alt="Loading..." width="20">
+                        </div>
+
+
+
+
+
+
+
+
+                        

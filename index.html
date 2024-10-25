@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="x-icon" href="/dccl--frontend-translate-app/logoicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translated.io</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <section id="hero">
+        <img id="p" src="/dccl--frontend-translate-app/logo.svg" alt="">
+        
+        <section id="rap">
+            <section id="boxe1">
+                <section id="maincol">
+                    <section id="btn">
+                        <button style="margin-top: 1.8px;" id="btns">Detect Language</button>
+                        <button style="margin-top: 1.8px;" id="btnss">English</button>
+                        <button style="margin-top: 1.8px;" id="btnss" onclick="setTranslateLanguage('fr')">French</button>
+                        <select id="btn1">
+                            <option value="es">Spanish</option>
+                            <option value="de">German</option>
+                            <option value="it">Italian</option>
+                            <option value="ja">Japanese</option>
+                            <option value="ko">Korean</option>
+                            <option value="zh-CN">Chinese (Simplified)</option>
+                            <option value="ru">Russian</option>
+                            <option value="ar">Arabic</option>
+                            <option value="ne">Nepali</option>
+                        </select>
+                    </section>
+                    <hr>
+                    <section id="text">
+                        <input id="text2" type="text" placeholder="Enter your text" autocomplete="off">
+                    </section>
+                    <section id="textcount">
+                        <label id="count">0/500</label>
+                    </section>
+                    <section id="elements">
+                        <button id="audio" onclick="return speakText('text2', translateToLanguage)"><img src="/dccl--frontend-translate-app/sound_max_fill.svg" alt=""></button>
+                        <button onclick="return copyText('text2')" id="copy"><img src="/dccl--frontend-translate-app/Copy.svg" alt=""></button>
+                        <button onclick="translateText()" style="display: flex; flex-direction: row; gap: 8px;" id="trans"> <img id="margi" src="/dccl--frontend-translate-app/Sort_alfa.svg" alt=""><p>Translate</p>
+                            <div id="loadingIndicator" style="display: none; margin-top: 4.5px; margin-left: 2px;">
+                                <img src="/dccl--frontend-translate-app/logo.png" alt="Loading..." width="20">
+                            </div>
+                        </button>
+                    </section>
+                </section>
+            </section>
+            <section id="boxe2">
+                <section id="maincol">
+                    <section id="btn">
+                        <button style="margin-top: 1.8px;" onclick="setTranslateLanguage('en')" id="btnss">English</button>
+                        <button style="margin-top: 1.8px;" onclick="setTranslateLanguage('fr')" id="btnss">French</button>
+                       <select onchange="setTranslateLanguage(this.value)" id="btn2">
+                            <option value="es">Spanish</option>
+                            <option value="de">German</option>
+                            <option value="it">Italian</option>
+                            <option value="ja">Japanese</option>
+                            <option value="ko">Korean</option>
+                            <option value="zh-CN">Chinese (Simplified)</option>
+                            <option value="ru">Russian</option>
+                            <option value="ar">Arabic</option>
+                            <option value="ne">Nepali</option>
+                        </select>
+                        <button id="swap" onclick="swapTextAndLanguage()"><img src="/dccl--frontend-translate-app/Horizontal_top_left_main.svg" alt=""></button>
+                    </section>
+                    <hr style="width: 92.5%;">
+                    <section id="text">
+                        <input id="text3" type="text" placeholder="Enter your text" autocomplete="off">
+                    </section>
+                    <section id="textcount">
+                        
+                    </section>
+                    <section id="elements">
+                        <button id="audio1" onclick="return speakText('text3', translateToLanguage)"><img src="/dccl--frontend-translate-app/sound_max_fill.svg" alt=""></button>
+                        <button id="copy1" onclick="return copyText('text3')"><img src="/dccl--frontend-translate-app/Copy.svg" alt=""></button>
+                        <div id="audioLoadingIndicator" style="display: none; margin-top: 43px; margin-left: 2px;">
+                            <img src="/dccl--frontend-translate-app/logo.png" alt="Loading..." width="20">
+                        </div>
+                    </section>
+                </section>
+            </section>
+        </section>
+    </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/franc/3.0.0/franc.min.js"></script>
+    <script>
+        document.getElementById('text2').addEventListener('input', function() {
+            var maxLength = 500;
+            var text = this.value;
+            
+            if (text.length > maxLength) {
+                this.value = text.substring(0, maxLength);
+                text = this.value;
+            }
+            
+            var countLabel = document.getElementById('count');
+            countLabel.textContent = text.length + '/' + maxLength;
+        });
+    
+        function speakText(inputId, lang) {
+    const text = document.getElementById(inputId).value;
+    const utterance = new SpeechSynthesisUtterance(text);
+    if (lang === 'ar') {
+        // Set voice for Arabic language
+        utterance.voiceURI = 'Google العربية';
+    } else {
+        utterance.lang = lang;
+    }
+    speechSynthesis.speak(utterance);
+
+    // Show audio loading indicator
+    document.getElementById('audioLoadingIndicator').style.display = 'block';
+
+    // Event listener for end of speech synthesis
+    utterance.onend = function(event) {
+        // Hide audio loading indicator after speech synthesis is complete
+        document.getElementById('audioLoadingIndicator').style.display = 'none';
+    };
+}
+    
+        function copyText(inputId) {
+            const inputField = document.getElementById(inputId);
+            inputField.select();
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+        }
+    
+        let translateToLanguage = 'en';
+    
+        function setTranslateLanguage(lang) {
+            translateToLanguage = lang;
+        }
+    
+        function swapTextAndLanguage() {
+            // Swap text values
+            const text2Value = document.getElementById('text2').value;
+            const text3Value = document.getElementById('text3').value;
+            document.getElementById('text2').value = text3Value;
+            document.getElementById('text3').value = text2Value;
+    
+            // Swap language selection
+            const selectedLanguage = document.getElementById('btn1').value;
+            document.getElementById('btn1').value = document.getElementById('btn2').value;
+            document.getElementById('btn2').value = selectedLanguage;
+    
+            // Auto-translate based on swapped text
+            translateText();
+        }
+    
+        async function translateText() {
+            const text = document.getElementById('text2').value;
+            const toLang = translateToLanguage;
+            const URL = 'https://google-translation-unlimited.p.rapidapi.com/translate';
+            const apiKey = 'dbd25eb8ebmshdf017dc952a499dp12fdc4jsn22b8e52d4f07'; // Replace with your API key
+    
+            const options = {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'X-RapidAPI-Key': apiKey,
+                    'X-RapidAPI-Host': 'google-translation-unlimited.p.rapidapi.com'
+                },
+                body: new URLSearchParams({
+                    texte: text,
+                    to_lang: toLang
+                })
+            };
+    
+            try {
+                // Display loading indicator
+                document.getElementById('loadingIndicator').style.display = 'block';
+    
+                const response = await fetch(URL, options);
+                const data = await response.json();
+                if (data && data.translation_data && data.translation_data.translation) {
+                    document.getElementById('text3').value = data.translation_data.translation;
+                } else {
+                    alert('Translation failed!');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Translation failed!');
+            } finally {
+                // Hide loading indicator after translation is complete
+                document.getElementById('loadingIndicator').style.display = 'none';
+            }
+        }
+    
+        async function detectLanguage() {
+            const text = document.getElementById('text2').value;
+            const URL = `https://ld4all.herokuapp.com/?q=${encodeURIComponent(text)}`;
+            
+            try {
+                const response = await fetch(URL);
+                const data = await response.json();
+                if (data && data.language) {
+                    console.log('Detected language:', data.language);
+                    // Set detected language
+                    document.getElementById('btn1').value = data.language;
+                } else {
+                    alert('Language detection failed!');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Language detection failed!');
+            }
+        }
+    
+        document.getElementById('btns').addEventListener('click', detectLanguage);
+    
+        document.getElementById('btnss').addEventListener('click', function() {
+            setTranslateLanguage('fr');
+            translateText();
+        });
+
+        // Translation to Nepali function
+        async function translateTextToNepali() {
+            const text = document.getElementById('text2').value;
+            const API_KEY = '319c56df3d69662f85fd';
+            const URL = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|ne&key=${API_KEY}`;
+            
+            try {
+                // Display loading indicator
+                document.getElementById('loadingIndicator').style.display = 'block';
+
+                const response = await fetch(URL);
+                const data = await response.json();
+                if (data && data.responseData && data.responseData.translatedText) {
+                    document.getElementById('text3').value = data.responseData.translatedText;
+                } else {
+                    alert('Translation to Nepali failed!');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Translation to Nepali failed!');
+            } finally {
+                // Hide loading indicator after translation is complete
+                document.getElementById('loadingIndicator').style.display = 'none';
+            }
+        }
+    </script>
+    
+</body>
+</html>
